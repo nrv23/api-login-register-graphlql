@@ -1,0 +1,48 @@
+# Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
+
+type Query {
+  #lista de usuarios de la bd 
+  users: [User!]! #devuelve un array de tipo user donde los elementos del array no pueden ser nulos ni 
+  # la respuesta puede ser nula
+
+  #inicio de sesion con los credenciales
+
+  login (email: String!, password: String!): String!
+
+  #obtener los datos de un usuario mediante autenticacion por token jwt
+
+  me: String!
+}
+
+
+
+type User {
+  id: ID!
+  nombre: String!
+  lastName: String!
+  password: String
+  email: String!
+  registerDate: String!
+}
+
+type Mutation {
+
+  #agregar usuarios
+
+  add(user: UserInput!): Boolean!  # siempre user types Input para los mutation y así respetar los valores que sean o no obligatorios
+
+  #actulizar usuarios
+
+
+  update(user: UserInput!): Boolean!
+}
+
+input UserInput {
+  id: ID
+  nombre: String!
+  lastName: String!
+  password: String
+  email: String!
+  registerDate: String!
+  
+}
