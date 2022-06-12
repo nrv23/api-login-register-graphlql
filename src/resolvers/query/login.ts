@@ -1,4 +1,3 @@
-import { IToken } from '../../interface/IToken';
 import { Db } from "mongodb";
 import { IUser } from "../../interface/IUser";
 import { IResolvers } from "@graphql-tools/utils";
@@ -9,18 +8,6 @@ const jwt = new Jwt();
 // arreglar el refactoring para separar los resolvers en carpetas y archivos para los diferentes tipos de resolvers hoy
 const queryResolvers: IResolvers = {
   Query: {
-    users: async (
-      _: void,
-      __: unknown, // no recibe parametros por lo que se pone como tipo indefinido
-      context: { db: Db }
-    ): Promise<Array<IUser>> => {
-      // se pone unknown porque no va recibir parametros
-
-      return (await context.db
-        .collection("users")
-        .find()
-        .toArray()) as Array<IUser>;
-    },
     login: async (
       _: void,
       args: { email: string; password: string },
@@ -39,7 +26,7 @@ const queryResolvers: IResolvers = {
           return {
             message: "Datos de autenticación incorrectos",
             status: false,
-            elementSelect: "user"
+            elementSelect: "user",
           };
 
         const { email, password } = args;
@@ -54,7 +41,7 @@ const queryResolvers: IResolvers = {
           return {
             status: false,
             message: "El usuario no existe",
-            elementSelect: "token"
+            elementSelect: "token",
           };
 
         if (
@@ -66,7 +53,7 @@ const queryResolvers: IResolvers = {
           return {
             message: "Datos de autenticación incorrectos",
             status: false,
-            elementSelect: "token"
+            elementSelect: "token",
           };
 
         delete userCheck.password;
@@ -84,7 +71,7 @@ const queryResolvers: IResolvers = {
           status: true,
           message: "Autenticado correctamente",
           token,
-          elementSelect: "token"
+          elementSelect: "token",
         };
       } catch (error) {
         console.log({ error });
@@ -92,56 +79,7 @@ const queryResolvers: IResolvers = {
         return {
           message: "Hubo un error en el servidor",
           status: false,
-          elementSelect: "token"
-        };
-      }
-    },
-
-    me: async (
-      _: void,
-      __: unknown, // no recibe parametros por lo que se pone como tipo indefinido
-      context: { db: Db; token: string }
-    ): Promise<{
-      status: boolean;
-      message: string;
-      elementSelect: string;
-      user?: IUser;
-    }> => {
-      try {
-        const userDecode = jwt.decode(context.token);
-
-        console.log({userDecode})
-        const { email } = userDecode;
-
-        const user = (await context.db
-          .collection("users")
-          .findOne({ email })) as IUser;
-
-        if(!user) {
-          return {
-            status: false,
-            message: "Usuario no encontrado",
-            elementSelect: "user"
-          };
-        }
-
-        delete user?.password;
-
-        console.log({user})
-
-        return {
-          status: true,
-          message: "Usuario encontrado",
-          user,
-          elementSelect: "user"
-        };
-      } catch (error) {
-        console.log(error);
-
-        return {
-          status: false,
-          message: "Error al buscar la información del usuario",
-          elementSelect: "user"
+          elementSelect: "token",
         };
       }
     },
