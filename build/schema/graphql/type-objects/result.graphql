@@ -1,0 +1,6 @@
+type ResultUser {
+
+    status: Boolean!
+    message: String!
+    user: User
+}

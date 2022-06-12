@@ -1,0 +1,19 @@
+type Query {
+  #lista de usuarios de la bd 
+  users: [User!]! #devuelve un array de tipo user donde los elementos del array no pueden ser nulos ni 
+  # la respuesta puede ser nula
+
+  #inicio de sesion con los credenciales
+
+  login (email: String!, password: String!): Result!
+
+  #obtener los datos de un usuario mediante autenticacion por token jwt
+ 
+ """
+  Comentario multilinea
+ """
+ 
+  me: Result!
+}
+
+# en graphql los escalares son los tipos de datos usados en las propiedades de los querys, Int, String, Boolean, ID, User

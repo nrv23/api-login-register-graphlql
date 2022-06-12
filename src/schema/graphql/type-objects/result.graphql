@@ -1,0 +1,14 @@
+type ResultUser implements Result {
+
+    status: Boolean!
+    message: String!
+    elementSelect: String!
+    user: User
+}
+
+type ResultToken implements Result {
+    status: Boolean!,
+    message: String!
+    elementSelect: String!
+    token: String # No es obligatorio porque puede fallar al crear el token
+}

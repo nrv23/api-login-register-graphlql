@@ -1,8 +1,10 @@
+import { IContext } from './interface/IContext';
 import { ApolloServer } from "apollo-server-express";
 import compression from "compression";
 import express, { Application } from "express";
 import { GraphQLSchema } from "graphql";
 import { createServer, Server } from "http";
+import Database from "./config/database";
 import result from "./config/environment";
 
 class GraphQLServer {
@@ -24,6 +26,8 @@ class GraphQLServer {
   }
 
   private init() {
+   
+
     this.initializeEnviroments();
     this.configExpress();
     this.configApolloServerExpress();
@@ -46,9 +50,34 @@ class GraphQLServer {
   }
 
   private async configApolloServerExpress() {
+
+     // llamar la funcion para iniciar la conexion con la bd 
+     const database = new Database();
+
+     const db = await database.init(); // retorna una promesa de la conexion a la bd
+     //resuelve la promesa para devolver la instancia de la bd
+
+     // obtener el token que se envía por la cabecera
+ 
+     const context = async ({req,connection}: IContext)  => { // compartir la conexion de la bd con la api de graphql
+      // obtener el token 
+
+      // por el context recibe el token por las cabeceras, como si fuera una requeste http de tipo rest
+
+      const token = req? req.headers.authorization : connection.authorization;
+
+      console.log(token)
+      
+      return {
+        db,
+        token
+      }
+     };
+
     const apolloServer = new ApolloServer({
       schema: this.schema,
       introspection: true,
+      context
     });
 
     await apolloServer.start();

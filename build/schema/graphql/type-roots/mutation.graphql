@@ -1,0 +1,11 @@
+type Mutation {
+
+  #agregar usuarios
+
+  add(user: UserInput!): ResultUser!  # siempre user types Input para los mutation y así respetar los valores que sean o no obligatorios
+
+  #actulizar usuarios
+
+
+  update(user: UserInput!): Boolean!
+}
