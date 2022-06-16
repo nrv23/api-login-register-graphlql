@@ -18,6 +18,9 @@ const mutationResolvers: IResolvers = {
       elementSelect:string;
       user?: IUser;
     }> => {
+
+      console.log({context})
+      console.log(args);
       try {
         if (!args.user.id) {
           return {

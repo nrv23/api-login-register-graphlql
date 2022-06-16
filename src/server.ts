@@ -66,7 +66,7 @@ class GraphQLServer {
 
       const token = req? req.headers.authorization : connection.authorization;
 
-      console.log(token)
+      console.log({token})
       
       return {
         db,
